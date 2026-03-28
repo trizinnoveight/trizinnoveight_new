@@ -307,7 +307,7 @@ export default function App() {
 
         /* HERO */
         #hero { min-height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; padding: 0 5%; overflow: hidden; }
-        .hero-bg-text { position: absolute; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: min(22vw,280px); color: ${bgText}; letter-spacing: -5px; top: 50%; left: 50%; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; user-select: none; }
+        .hero-bg-text { position: absolute; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: min(22vw,280px); color: ${bgText}; letter-spacing: -5px; top: 50%; left: 50%; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; user-select: none; text-shadow: 0 0 60px rgba(255,255,255,0.15); filter: blur(0.6px);opacity: 0.9;}
         .hero-content { position: relative; z-index: 2; max-width: 900px; }
         .hero-eyebrow { font-size: 0.7rem; letter-spacing: 5px; color: ${gray}; text-transform: uppercase; margin-bottom: 28px; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.2s; }
         .hero-eyebrow.visible { opacity: 1; transform: translateY(0); }
