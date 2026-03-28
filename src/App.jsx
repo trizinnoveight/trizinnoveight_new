@@ -194,6 +194,8 @@ export default function App() {
   const [heroVisible, setHeroVisible] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setHeroVisible(true), 100);
@@ -207,11 +209,32 @@ export default function App() {
     setMenuOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
-    setFormData({ name: "", email: "", message: "" });
+    setSending(true);
+    setError(false);
+    try {
+      const res = await fetch("https://formspree.io/f/mpqoqywk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        setError(true);
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   const services = [
@@ -1019,7 +1042,7 @@ export default function App() {
             <p>Ready to build something remarkable? Tell us about your project and let's make it happen. We typically respond within 24 hours.</p>
             <div className="contact-item">
               <span className="contact-item-label">Email</span>
-              <span className="contact-item-val"><a href="mailto:hello@trizinnoveight.com">hello@trizinnoveight.com</a></span>
+              <span className="contact-item-val"><a href="mailto:info@trizinnoveight.com">info@trizinnoveight.com</a></span>
             </div>
             <div className="contact-item">
               <span className="contact-item-label">Website</span>
@@ -1048,8 +1071,11 @@ export default function App() {
                 <textarea rows={5} placeholder="Tell us about your project..." value={formData.message} required
                   onChange={e => setFormData({...formData, message: e.target.value})} />
               </div>
-              <button type="submit" className="form-submit">Send Message →</button>
-              {submitted && <p className="form-success">✓ Message received. We'll be in touch soon.</p>}
+              <button type="submit" className="form-submit" disabled={sending}>
+                {sending ? "Sending..." : "Send Message →"}
+              </button>
+              {submitted && <p className="form-success">✓ Message sent! We'll get back to you within 24 hours.</p>}
+              {error && <p className="form-success" style={{color:"#ff6b6b"}}>✗ Something went wrong. Please email us directly at info@trizinnoveight.com</p>}
             </form>
           </div>
         </div>
